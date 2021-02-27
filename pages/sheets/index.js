@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import styles from '../../styles/Sheets.module.css'
 
 const employee = () => ({
     id: Date.now(),
@@ -19,7 +20,11 @@ export default function Sheets() {
       </Head>
 
       <main>
-          {/* TODO: Search functionality*/}
+          <div className={styles.container}>
+              <div className={styles.tableHeader}> Table Header </div>
+              <div> {/* TODO: Search functionality*/} </div>
+              <div className={styles.tableContentRows}> Table rows </div>
+          </div>
           {/* TODO: Some basic validations (date, phone number validation etc.)*/}
           {/* TODO: Pagination*/}
       </main>
