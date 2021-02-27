@@ -7,7 +7,7 @@ export function SheetHeader({cells}) {
                 {
                     cells.map(cell => (
                         <div className={styles.tableHeaderCell} key={cell.name}>
-                            {cell.name.replace(/([a-z0-9])([A-Z])/g, '$1 $2')}
+                            {cell.name}
                         </div>
                     ))
                 }

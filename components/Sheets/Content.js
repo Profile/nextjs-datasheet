@@ -2,11 +2,9 @@ import { EditableInput } from './EditableInput';
 import styles from './Sheets.module.css';
 
 export function SheetContent({ rows, cells, editableCell, setEditableCell, handleCellValue }) {
-    const nonEditableCells = ['id'];
-
     /** Generate unique key. */
-    const generateUniqueKey = (main, child) => {
-        return `${main}.${child}`;
+    const generateUniqueKey = (key, index) => {
+        return `${key}.${index}`;
     };
 
     return (
@@ -14,21 +12,25 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
             {rows.map((row, rowIndex) => (
                 <div className={styles.tableContentRows} key={rowIndex}>
                     {cells.map((cell) => (
-                        <div className={styles.tableContentCell} key={cell.name}>
-                            {!nonEditableCells.includes(cell.name) &&
-                            editableCell === generateUniqueKey(cell.name, rowIndex) ? (
+                        <div className={styles.tableContentCell} key={cell.key}>
+                            {cell.editable && editableCell === generateUniqueKey(cell.key, rowIndex) ? (
                                 <EditableInput
-                                    value={row[cell.name]}
-                                    onChange={({target}) => handleCellValue(generateUniqueKey(cell.name, rowIndex), target.value)}
-                                    onFocus={(event => event.target.select())}
+                                    value={row[cell.key]}
+                                    onChange={({ target }) =>
+                                        handleCellValue(
+                                            generateUniqueKey(cell.key, rowIndex),
+                                            target.value
+                                        )
+                                    }
+                                    onFocus={(event) => event.target.select()}
                                 />
                             ) : (
                                 <div
                                     className={styles.tableContentCellValue}
                                     onDoubleClick={() =>
-                                        setEditableCell(generateUniqueKey(cell.name, rowIndex))
+                                        setEditableCell(generateUniqueKey(cell.key, rowIndex))
                                     }>
-                                    {row[cell.name]}
+                                    {row[cell.key]}
                                 </div>
                             )}
                         </div>

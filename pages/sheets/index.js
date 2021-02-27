@@ -21,7 +21,14 @@ const mockEmployees = [
     employee(),
 ]
 
-const headerCells = Object.keys(employee()).map((cell) => ({ name: cell }));
+const headerCells = [
+    {key: 'id', name: 'ID', type: 'text', editable: false,filterable: true  },
+    {key: 'name', name: 'Name', type: 'text', editable: true, filterable: true  },
+    {key: 'surname', name: 'Surname', type: 'text', editable: true, filterable: true  },
+    {key: 'dateOfBirth', name: 'Date of birth', type: 'text', editable: true, filterable: true  },
+    {key: 'position', name: 'Position', type: 'text', editable: true, filterable: true  },
+    {key: 'phone', name: 'Phone', type: 'text', editable: true, filterable: true  },
+];
 
 export default function Sheets() {
     const [editableCell, setEditableCell] = useState(null);
