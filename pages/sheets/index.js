@@ -16,7 +16,7 @@ const employee = () => ({
 });
 const employees = Array.from({ length: 5 }).fill(employee());
 
-const headerCells = Object.keys(employee());
+const headerCells = Object.keys(employee()).map(cell => ({ name: cell }));
 
 export default function Sheets() {
     const [editableCell, setEditableCell] = useState(null);

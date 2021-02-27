@@ -1,6 +1,8 @@
+import { EditAbleInput } from './editableInput';
 import styles from './Sheets.module.css';
 
 export function SheetContent({ rows, cells, editableCell, setEditableCell }) {
+    const nonEditableCells = ['id'];
     const generateCustomKey = (main, child) => {
         return `${main}.${child}`;
     };
@@ -10,21 +12,21 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell }) {
             {rows.map((row, rowIndex) => (
                 <div className={styles.tableContentRows} key={rowIndex}>
                     {cells.map((cell) => (
-                        <div className={styles.tableContentCell} key={cell}>
-                            {editableCell === generateCustomKey(cell, rowIndex) ? (
-                                <input
-                                    className={styles.tableContentCellInput}
-                                    type="text"
-                                    value={row[cell]}
-                                    autoFocus={true}
+                        <div className={styles.tableContentCell} key={cell.name}>
+                            {!nonEditableCells.includes(cell.name) &&
+                            editableCell === generateCustomKey(cell.name, rowIndex) ? (
+                                <EditAbleInput
+                                    value={row[cell.name]}
+                                    onChange={() => console.log(222)}
+                                    onBlur={() => console.log(222)}
                                 />
                             ) : (
                                 <div
                                     className={styles.tableContentCellValue}
                                     onDoubleClick={() =>
-                                        setEditableCell(generateCustomKey(cell, rowIndex))
+                                        setEditableCell(generateCustomKey(cell.name, rowIndex))
                                     }>
-                                    {row[cell]}
+                                    {row[cell.name]}
                                 </div>
                             )}
                         </div>
