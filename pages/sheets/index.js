@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { useState } from 'react';
 
-import { SheetHeader } from 'components/Sheets/header';
-import { SheetContent } from 'components/Sheets/content';
+import { SheetHeader } from 'components/Sheets/Header';
+import { SheetContent } from 'components/Sheets/Content';
 
 import styles from 'styles/Sheets.module.css';
 

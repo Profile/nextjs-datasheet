@@ -1,6 +1,6 @@
 import styles from "./Sheets.module.css";
 
-export function EditAbleInput({value, onChange, onBlur}) {
+export function EditableInput({value, onChange, onBlur}) {
     return (
         <input
             className={styles.tableContentCellInput}

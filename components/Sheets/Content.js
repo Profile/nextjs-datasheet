@@ -1,4 +1,4 @@
-import { EditAbleInput } from './editableInput';
+import { EditableInput } from './EditableInput';
 import styles from './Sheets.module.css';
 
 export function SheetContent({ rows, cells, editableCell, setEditableCell }) {
@@ -15,7 +15,7 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell }) {
                         <div className={styles.tableContentCell} key={cell.name}>
                             {!nonEditableCells.includes(cell.name) &&
                             editableCell === generateCustomKey(cell.name, rowIndex) ? (
-                                <EditAbleInput
+                                <EditableInput
                                     value={row[cell.name]}
                                     onChange={() => console.log(222)}
                                     onBlur={() => console.log(222)}
