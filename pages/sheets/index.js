@@ -11,6 +11,10 @@ const employee = () => ({
 });
 const employees = Array.from({length: 5}).fill(employee());
 
+const headerCells = Object.keys(employee());
+
+console.log(headerCells)
+
 export default function Sheets() {
   return (
     <div>
@@ -23,24 +27,13 @@ export default function Sheets() {
           <div className={styles.container}>
               <div className={styles.tableHeader}>
                   <div className={styles.tableHeaderRows}>
-                      <div className={styles.tableHeaderCell}>
-                          id
-                      </div>
-                      <div className={styles.tableHeaderCell}>
-                          name
-                      </div>
-                      <div className={styles.tableHeaderCell}>
-                          surname
-                      </div>
-                      <div className={styles.tableHeaderCell}>
-                          dateOfBirth
-                      </div>
-                      <div className={styles.tableHeaderCell}>
-                          position
-                      </div>
-                      <div className={styles.tableHeaderCell}>
-                          phone
-                      </div>
+                      {
+                          headerCells.map(cell => (
+                              <div className={styles.tableHeaderCell} key={cell}>
+                                  {cell.replace(/([a-z0-9])([A-Z])/g, '$1 $2')}
+                              </div>
+                          ))
+                      }
                   </div>
               </div>
               <div> {/* TODO: Search functionality*/} </div>

@@ -17,6 +17,7 @@
 }
 
 .tableHeaderCell {
+    text-transform: capitalize;
     background: #f9f9f9;
     padding: 8px;
     font-weight: 700;
