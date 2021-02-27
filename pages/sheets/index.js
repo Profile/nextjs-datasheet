@@ -53,7 +53,7 @@ export default function Sheets() {
             </Head>
 
             <main>
-                <div className={styles.container}>
+                <section className={styles.sheet}>
                     {<SheetHeader cells={headerCells} />}
                     <div> {/* TODO: Search functionality*/} </div>
                     {
@@ -65,9 +65,16 @@ export default function Sheets() {
                             cells={headerCells}
                         />
                     }
-                </div>
+                </section>
                 {/* TODO: Some basic validations (date, phone number validation etc.)*/}
                 {/* TODO: Pagination*/}
+
+                <div className={styles.formActions}>
+                    <button className={styles.submitAction}>
+                        Save changes
+                    </button>
+                </div>
+
             </main>
         </div>
     );

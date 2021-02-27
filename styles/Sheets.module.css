@@ -1,3 +1,14 @@
-.container {
-    min-height: 100vh;
+.sheet {
+    margin-bottom: 20px;
+}
+
+.formActions button {
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submitAction {
+    background-color: #03a9f4;
+    border: none;
 }
