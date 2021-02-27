@@ -28,6 +28,7 @@ const headerCells = [
     {key: 'dateOfBirth', name: 'Date of birth', type: 'text', editable: true, filterable: true  },
     {key: 'position', name: 'Position', type: 'text', editable: true, filterable: true  },
     {key: 'phone', name: 'Phone', type: 'text', editable: true, filterable: true  },
+    {key: 'deleted', name: 'Mark as deleted', type: 'checkbox', editable: true, filterable: false  },
 ];
 
 export default function Sheets() {
