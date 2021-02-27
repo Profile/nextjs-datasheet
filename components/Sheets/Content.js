@@ -29,7 +29,7 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
         onChange={({ target }) =>
             handleCellValue(
                 generateUniqueKey(cell.key, rowIndex),
-                !target.value
+                !row[cell.key]
             )
         }
     />

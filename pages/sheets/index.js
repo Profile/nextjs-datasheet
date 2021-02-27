@@ -19,16 +19,16 @@ const mockEmployees = [
     employee(),
     employee(),
     employee(),
-]
+];
 
 const headerCells = [
-    {key: 'selected', name: 'Select', type: 'checkbox', editable: false, filterable: false  },
-    {key: 'id', name: 'ID', type: 'text', editable: false,filterable: true  },
-    {key: 'name', name: 'Name', type: 'text', editable: true, filterable: true  },
-    {key: 'surname', name: 'Surname', type: 'text', editable: true, filterable: true  },
-    {key: 'dateOfBirth', name: 'Date of birth', type: 'text', editable: true, filterable: true  },
-    {key: 'position', name: 'Position', type: 'text', editable: true, filterable: true  },
-    {key: 'phone', name: 'Phone', type: 'text', editable: true, filterable: true  },
+    { key: 'id', name: 'ID', type: 'text', editable: false, filterable: true },
+    { key: 'name', name: 'Name', type: 'text', editable: true, filterable: true },
+    { key: 'surname', name: 'Surname', type: 'text', editable: true, filterable: true },
+    { key: 'dateOfBirth', name: 'Date of birth', type: 'text', editable: true, filterable: true },
+    { key: 'position', name: 'Position', type: 'text', editable: true, filterable: true },
+    { key: 'phone', name: 'Phone', type: 'text', editable: true, filterable: true },
+    { key: 'deleted', name: 'Mark as deleted', type: 'checkbox', editable: false, filterable: false },
 ];
 
 export default function Sheets() {
@@ -39,7 +39,7 @@ export default function Sheets() {
     const handleCellValue = (name, value) => {
         const [key, index] = name.split('.');
         const copiedEmployees = [...employees];
-        const editedEmployee = copiedEmployees[index]; //.find((e, i) => index == i);
+        const editedEmployee = employees[index];
         editedEmployee[key] = value;
 
         setEmployees(copiedEmployees);
