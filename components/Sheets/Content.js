@@ -1,9 +1,11 @@
 import { EditableInput } from './EditableInput';
 import styles from './Sheets.module.css';
 
-export function SheetContent({ rows, cells, editableCell, setEditableCell }) {
+export function SheetContent({ rows, cells, editableCell, setEditableCell, handleCellValue }) {
     const nonEditableCells = ['id'];
-    const generateCustomKey = (main, child) => {
+
+    /** Generate unique key. */
+    const generateUniqueKey = (main, child) => {
         return `${main}.${child}`;
     };
 
@@ -14,17 +16,17 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell }) {
                     {cells.map((cell) => (
                         <div className={styles.tableContentCell} key={cell.name}>
                             {!nonEditableCells.includes(cell.name) &&
-                            editableCell === generateCustomKey(cell.name, rowIndex) ? (
+                            editableCell === generateUniqueKey(cell.name, rowIndex) ? (
                                 <EditableInput
                                     value={row[cell.name]}
-                                    onChange={() => console.log(222)}
-                                    onBlur={() => console.log(222)}
+                                    onChange={({target}) => handleCellValue(generateUniqueKey(cell.name, rowIndex), target.value)}
+                                    onFocus={(event => event.target.select())}
                                 />
                             ) : (
                                 <div
                                     className={styles.tableContentCellValue}
                                     onDoubleClick={() =>
-                                        setEditableCell(generateCustomKey(cell.name, rowIndex))
+                                        setEditableCell(generateUniqueKey(cell.name, rowIndex))
                                     }>
                                     {row[cell.name]}
                                 </div>
