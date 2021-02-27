@@ -2,10 +2,10 @@ import Head from 'next/head';
 import styles from '../../styles/Sheets.module.css'
 
 const employee = () => ({
-    id: Date.now(),
+    id: 1,
     name: 'Example name',
     surname: 'Example surname',
-    dateOfBirth: Date.now().toLocaleString(),
+    dateOfBirth: '1614446820809',
     position: 'CASHIER',
     phone: '+994000000000'
 });
@@ -35,7 +35,23 @@ export default function Sheets() {
                   </div>
               </div>
               <div> {/* TODO: Search functionality*/} </div>
-              <div className={styles.tableContentRows}> Table rows </div>
+              <div className={styles.tableContent}>
+
+                        {
+                            employees.map((employee, employeeIndex) => (
+                                <div className={styles.tableContentRows} key={employeeIndex}>
+                                    {headerCells.map(cell => (
+                                        <div className={styles.tableContentCell} key={cell}>
+                                            <div className={styles.tableContentCellValue}>
+                                                {employee[cell]}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ))
+                        }
+
+              </div>
           </div>
           {/* TODO: Some basic validations (date, phone number validation etc.)*/}
           {/* TODO: Pagination*/}
