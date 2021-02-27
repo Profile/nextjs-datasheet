@@ -9,3 +9,18 @@
 .tableContentRows {
 
 }
+
+.tableHeaderRows {
+    display: flex;
+    flex-shrink: 0;
+    flex: 1;
+}
+
+.tableHeaderCell {
+    background: #f9f9f9;
+    padding: 8px;
+    font-weight: 700;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    min-width: var(--defaultCellWidth);
+}
