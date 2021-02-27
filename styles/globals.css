@@ -1,3 +1,9 @@
+/* Variables. */
+:root {
+  --defaultCellWidth: 120px;
+  --minCellWidth: 120px;
+}
+
 html,
 body {
   padding: 0;
