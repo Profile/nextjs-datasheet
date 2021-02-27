@@ -14,12 +14,28 @@ const employee = () => ({
     position: 'CASHIER',
     phone: '+994000000000'
 });
-const employees = Array.from({ length: 5 }).fill(employee());
+const mockEmployees = [
+    employee(),
+    employee(),
+    employee(),
+    employee(),
+]
 
-const headerCells = Object.keys(employee()).map(cell => ({ name: cell }));
+const headerCells = Object.keys(employee()).map((cell) => ({ name: cell }));
 
 export default function Sheets() {
     const [editableCell, setEditableCell] = useState(null);
+    const [employees, setEmployees] = useState(mockEmployees);
+
+    /** Handle editable cell. */
+    const handleCellValue = (name, value) => {
+        const [key, index] = name.split('.');
+        const copiedEmployees = [...employees];
+        const editedEmployee = copiedEmployees[index]; //.find((e, i) => index == i);
+        editedEmployee[key] = value;
+
+        setEmployees(copiedEmployees);
+    };
 
     return (
         <div>
@@ -34,6 +50,7 @@ export default function Sheets() {
                     <div> {/* TODO: Search functionality*/} </div>
                     {
                         <SheetContent
+                            handleCellValue={handleCellValue}
                             editableCell={editableCell}
                             setEditableCell={setEditableCell}
                             rows={employees}
