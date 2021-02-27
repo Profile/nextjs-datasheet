@@ -21,7 +21,28 @@ export default function Sheets() {
 
       <main>
           <div className={styles.container}>
-              <div className={styles.tableHeader}> Table Header </div>
+              <div className={styles.tableHeader}>
+                  <div className={styles.tableHeaderRows}>
+                      <div className={styles.tableHeaderCell}>
+                          id
+                      </div>
+                      <div className={styles.tableHeaderCell}>
+                          name
+                      </div>
+                      <div className={styles.tableHeaderCell}>
+                          surname
+                      </div>
+                      <div className={styles.tableHeaderCell}>
+                          dateOfBirth
+                      </div>
+                      <div className={styles.tableHeaderCell}>
+                          position
+                      </div>
+                      <div className={styles.tableHeaderCell}>
+                          phone
+                      </div>
+                  </div>
+              </div>
               <div> {/* TODO: Search functionality*/} </div>
               <div className={styles.tableContentRows}> Table rows </div>
           </div>
