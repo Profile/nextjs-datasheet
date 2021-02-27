@@ -22,13 +22,13 @@ const mockEmployees = [
 ]
 
 const headerCells = [
+    {key: 'selected', name: 'Select', type: 'checkbox', editable: false, filterable: false  },
     {key: 'id', name: 'ID', type: 'text', editable: false,filterable: true  },
     {key: 'name', name: 'Name', type: 'text', editable: true, filterable: true  },
     {key: 'surname', name: 'Surname', type: 'text', editable: true, filterable: true  },
     {key: 'dateOfBirth', name: 'Date of birth', type: 'text', editable: true, filterable: true  },
     {key: 'position', name: 'Position', type: 'text', editable: true, filterable: true  },
     {key: 'phone', name: 'Phone', type: 'text', editable: true, filterable: true  },
-    {key: 'deleted', name: 'Mark as deleted', type: 'checkbox', editable: true, filterable: false  },
 ];
 
 export default function Sheets() {
