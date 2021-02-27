@@ -13,8 +13,6 @@ const employees = Array.from({length: 5}).fill(employee());
 
 const headerCells = Object.keys(employee());
 
-console.log(headerCells)
-
 export default function Sheets() {
   return (
     <div>
