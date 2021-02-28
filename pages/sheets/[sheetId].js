@@ -85,8 +85,8 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
     };
 
     /** Handle Click outside of editable input. */
-    const handleCloseEditableCell = ({ target: { localName } }) => {
-        if (localName === 'input') return;
+    const handleCloseEditableCell = ({ target: { type } }) => {
+        if (type === 'text') return;
         setEditableCell(null);
     };
 
