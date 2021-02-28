@@ -33,7 +33,19 @@ const headerCells = [
 
 export default function Sheets() {
     const [editableCell, setEditableCell] = useState(null);
+    const [initialValues] = useState(mockEmployees);// TODO: experimental
     const [employees, setEmployees] = useState(mockEmployees);
+
+    /** Return touched value. */
+    const isTouched = (value) => value.touched;
+
+    /** Computed diff between initial and current value. */
+    const isEqualInitialValue = (item, index) => {
+        const currentValues = JSON.stringify(item);
+        const initialValue = JSON.stringify(initialValues[index]);
+
+        return currentValues === initialValue;
+    };
 
     /** Handle editable cell. */
     const handleCellValue = (name, value) => {
@@ -41,8 +53,31 @@ export default function Sheets() {
         const copiedEmployees = [...employees];
         const editedEmployee = employees[index];
         editedEmployee[key] = value;
+        editedEmployee.touched = true;
 
         setEmployees(copiedEmployees);
+    };
+
+    /** Handle sheets submit action. */
+    const handleSubmitForm = () => {
+        const touched = employees.filter(isTouched);
+        const payload = {
+            updated: [],
+            deleted: [],
+        };
+
+        touched.forEach((item, index) => {
+            const {deleted, touched, ...rest} = item;
+
+            if(deleted) {
+                payload.deleted.push(rest);
+            }
+            else if(!deleted && !isEqualInitialValue(rest, index)) {
+                payload.updated.push(rest);
+            }
+        });
+
+        console.log(payload);
     };
 
     return (
@@ -70,7 +105,7 @@ export default function Sheets() {
                 {/* TODO: Pagination*/}
 
                 <div className={styles.formActions}>
-                    <button className={styles.submitAction}>
+                    <button className={styles.submitAction} onClick={handleSubmitForm}>
                         Save changes
                     </button>
                 </div>
