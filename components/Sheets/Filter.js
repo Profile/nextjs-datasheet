@@ -1,7 +1,7 @@
 import styles from './Sheets.module.css';
 
 export function SheetFilter({ cells, filterValues, onChange }) {
-    const whiteListInputType = ['text', 'date', 'checkbox'];
+    const whiteListInputType = ['text', 'checkbox'];
 
     return (
         <div className={styles.tableHeader}>
@@ -12,7 +12,7 @@ export function SheetFilter({ cells, filterValues, onChange }) {
                             <input
                                 defaultValue={filterValues[cell.key]}
                                 className={styles.tableFilterCellInput}
-                                type={whiteListInputType.includes(cell.type) && cell.type}
+                                type={whiteListInputType.includes(cell.type) ? cell.type: 'text'}
                                 onChange={({ target }) => onChange({ [cell.key]: target.value })}
                             />
                         )}
