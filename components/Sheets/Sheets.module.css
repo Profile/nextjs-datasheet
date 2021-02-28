@@ -2,8 +2,8 @@
     min-height: 100vh;
 }
 
-.tableHeader {
-
+.tableContent {
+    margin-bottom: 30px;
 }
 
 .tableHeaderRows, .tableContentRows {

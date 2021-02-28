@@ -13,6 +13,7 @@ import validate from 'utils/validate';
 
 import styles from 'styles/Sheets.module.css';
 
+// It should come from BE.
 const headerCells = [
     { key: 'id', name: 'ID', type: 'text', editable: false, filterable: true },
     { key: 'name', name: 'Name', type: 'text', editable: true, filterable: true },
@@ -32,7 +33,7 @@ const headerCells = [
 export default function Sheets({ employees: { data: employeesData, meta } }) {
     const [editableCell, setEditableCell] = useState(null);
     const [isFormChanged, setIsFormChanged] = useState(false);
-    const [initialValues, setInitialValues] = useState(deepClone(employeesData));
+    const [initialValues] = useState(deepClone(employeesData));
     const [employees, setEmployees] = useState(employeesData);
     const [filterValues, setFilterValues] = useState({});
 
@@ -46,8 +47,8 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
 
     /** Item has errors. */
     const hasErrors = (value) => {
-        return !value.deleted && Object.values(value.error).find(i => !!i)
-    }
+        return !value.deleted && Object.values(value.error).find((i) => !!i);
+    };
 
     /** Computed diff between initial and current value. */
     const isEqualInitialValue = (item) => {
@@ -107,7 +108,7 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
         const touched = employees.filter(isChanged);
         const hasError = touched.find(hasErrors);
 
-        if(hasError) {
+        if (hasError) {
             return alert('Please fix errors');
         }
 
@@ -129,11 +130,9 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
             await postData('/api/employees', payload);
             alert('Successfully updated');
             window.location.reload();
-        }catch (e) {
+        } catch (e) {
             alert('Something went wrong..');
         }
-
-
     };
 
     return (
@@ -144,39 +143,44 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
             </Head>
 
             <main className={styles.mainContent} onClick={(e) => handleCloseEditableCell(e)}>
-                <section className={styles.sheet}>
-                    <SheetHeader cells={headerCells} />
-                    <SheetFilter
-                        filterValues={filterValues}
-                        onChange={handleFilterValues}
-                        cells={headerCells}
-                    />
-                    <SheetContent
-                        handleCellValue={handleCellValue}
-                        editableCell={editableCell}
-                        setEditableCell={setEditableCell}
-                        rows={handleFilteredItems(employees)}
-                        cells={headerCells}
-                    />
-                </section>
-                <SheetPagination {...meta} />
+                <div className={styles.sideBar}></div>
+                <div className={styles.content}>
+                    <div className={styles.contentHeader}></div>
+                    <section className={styles.sheet}>
+                        <h1 className={styles.contentTitle}>Employees</h1>
+                        <SheetHeader cells={headerCells} />
+                        <SheetFilter
+                            filterValues={filterValues}
+                            onChange={handleFilterValues}
+                            cells={headerCells}
+                        />
+                        <SheetContent
+                            handleCellValue={handleCellValue}
+                            editableCell={editableCell}
+                            setEditableCell={setEditableCell}
+                            rows={handleFilteredItems(employees)}
+                            cells={headerCells}
+                        />
+                        <SheetPagination {...meta} />
 
-                {isFormChanged && (
-                    <div className={styles.formActions}>
-                        <button className={styles.submitAction} onClick={handleSubmitForm}>
-                            Save changes
-                        </button>
-                        <button className={styles.submitAction} onClick={handleRevertValues}>
-                            Revert all changes
-                        </button>
-                    </div>
-                )}
+                        {isFormChanged && (
+                            <div className={styles.formActions}>
+                                <button className={styles.submitAction} onClick={handleSubmitForm}>
+                                    Save changes
+                                </button>
+                                <button className={styles.submitAction} onClick={handleRevertValues}>
+                                    Revert all changes
+                                </button>
+                            </div>
+                        )}
+                    </section>
+                </div>
             </main>
         </div>
     );
 }
 
-const generateUrlPath = ({currentPage} = {}) => {
+const generateUrlPath = ({ currentPage } = {}) => {
     return `${process.env.API_BASE_URL}/api/employees?currentPage=${Math.max(currentPage || 1, 1)}`;
 };
 

@@ -1,9 +1,13 @@
 .mainContent {
     min-height: 100vh;
+    display: flex;
+    background-color: #fafafa;
 }
 
 .sheet {
     margin-bottom: 20px;
+    background-color: #fafafa;
+    padding: 20px;
 }
 
 .formActions button {
@@ -21,4 +25,30 @@
     border: none;
     color: white;
     font-weight: bold;
+}
+
+.sideBar {
+    flex: 1;
+    max-width: 120px;
+    background-color: #1885d3;
+}
+
+.contentHeader {
+    width: 100%;
+    height: 60px;
+    background-color: white;
+    margin-bottom: 20px;
+
+    box-shadow: -1px -4px 15px -5px rgba(89,84,89,1);
+    -webkit-box-shadow: -1px -4px 15px -5px rgba(89,84,89,1);
+    -moz-box-shadow: -1px -4px 15px -5px rgba(89,84,89,1);
+}
+
+.content {
+    flex: 1;
+}
+
+.contentTitle {
+    margin-top: 0;
+    font-size: 26px;
 }
