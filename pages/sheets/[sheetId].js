@@ -32,7 +32,7 @@ const headerCells = [
 export default function Sheets({ employees: { data: employeesData, meta } }) {
     const [editableCell, setEditableCell] = useState(null);
     const [isFormChanged, setIsFormChanged] = useState(false);
-    const [initialValues] = useState(deepClone(employeesData));
+    const [initialValues, setInitialValues] = useState(deepClone(employeesData));
     const [employees, setEmployees] = useState(employeesData);
     const [filterValues, setFilterValues] = useState({});
 
@@ -128,6 +128,7 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
         try {
             await postData('/api/employees', payload);
             alert('Successfully updated');
+            window.location.reload();
         }catch (e) {
             alert('Something went wrong..');
         }
