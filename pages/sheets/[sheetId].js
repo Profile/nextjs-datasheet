@@ -40,8 +40,13 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
         setIsFormChanged(!!employees.find(isChanged));
     }, [employees]);
 
-    /** Return changed value. */
+    /** Item is changed. */
     const isChanged = (value) => !!value.touched || !!value.deleted;
+
+    /** Item has errors. */
+    const hasErrors = (value) => {
+        return !value.deleted && Object.values(value.error).find(i => !!i)
+    }
 
     /** Computed diff between initial and current value. */
     const isEqualInitialValue = (item) => {
@@ -95,10 +100,6 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
             });
         });
     };
-
-    const hasErrors = (value) => {
-       return !value.deleted && Object.values(value.error).find(i => !!i)
-    }
 
     /** Handle sheets submit action. */
     const handleSubmitForm = () => {
