@@ -176,7 +176,7 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
 }
 
 const generateUrlPath = ({currentPage} = {}) => {
-    return `${process.env.API_BASE_URL}/api/employees?currentPage=${Math.max(currentPage || 1, 1)} : ''}`;
+    return `${process.env.API_BASE_URL}/api/employees?currentPage=${Math.max(currentPage || 1, 1)}`;
 };
 
 export async function getServerSideProps({ query }) {
