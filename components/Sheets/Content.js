@@ -3,54 +3,54 @@ import styles from './Sheets.module.css';
 
 export function SheetContent({ rows, cells, editableCell, setEditableCell, handleCellValue }) {
     /** Generate unique key. */
-    const generateUniqueKey = (key, index) => {
-        return `${key}.${index}`;
+    const generateUniqueKey = (key, id) => {
+        return `${key}.${id}`;
     };
 
     /** Render editable cell. */
-    const renderEditableCell = ({ row, rowIndex, cell }) => (
+    const renderEditableCell = ({ row, cell }) => (
         <EditableInput
             value={row[cell.key]}
             onChange={({ target }) =>
-                handleCellValue(generateUniqueKey(cell.key, rowIndex), target.value)
+                handleCellValue(generateUniqueKey(cell.key, row.id), target.value)
             }
             onFocus={(event) => event.target.select()}
         />
     );
 
     /** Render checkbox cell. */
-    const renderCheckboxCell = ({ row, rowIndex, cell }) => (
+    const renderCheckboxCell = ({ row, cell }) => (
         <input
             type="checkbox"
             checked={row[cell.key] !== undefined ? row[cell.key] : false}
             defaultChecked={row[cell.key]}
             onChange={({ target }) =>
-                handleCellValue(generateUniqueKey(cell.key, rowIndex), !row[cell.key])
+                handleCellValue(generateUniqueKey(cell.key, row.id), !row[cell.key])
             }
         />
     );
 
     /** Computed editable cell. */
-    const canEdit = ({ cell, rowIndex }) => {
-        return cell.editable && editableCell === generateUniqueKey(cell.key, rowIndex);
+    const canEdit = ({ cell, row }) => {
+        return cell.editable && editableCell === generateUniqueKey(cell.key, row.id);
     };
 
     return (
         <div className={styles.tableContent}>
-            {rows.map((row, rowIndex) => (
-                <div className={styles.tableContentRows} key={rowIndex}>
+            {rows.map(row => (
+                <div className={styles.tableContentRows} key={row.id}>
                     {cells.map((cell) => (
                         <div className={styles.tableContentCell} key={cell.key}>
-                            {canEdit({ cell, rowIndex }) ? (
-                                renderEditableCell({ row, rowIndex, cell })
+                            {canEdit({ cell, row }) ? (
+                                renderEditableCell({ row, cell })
                             ) : (
                                 <div
                                     className={styles.tableContentCellValue}
                                     onDoubleClick={() =>
-                                        setEditableCell(generateUniqueKey(cell.key, rowIndex))
+                                        setEditableCell(generateUniqueKey(cell.key, row.id))
                                     }>
                                     {cell.type === 'checkbox'
-                                        ? renderCheckboxCell({ row, rowIndex, cell })
+                                        ? renderCheckboxCell({ row, cell })
                                         : row[cell.key]}
                                 </div>
                             )}

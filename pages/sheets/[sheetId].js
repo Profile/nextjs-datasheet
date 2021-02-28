@@ -36,18 +36,18 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
     const isTouched = (value) => value.touched;
 
     /** Computed diff between initial and current value. */
-    const isEqualInitialValue = (item, index) => {
+    const isEqualInitialValue = (item) => {
         const currentValues = JSON.stringify(item);
-        const initialValue = JSON.stringify(initialValues[index]);
+        const initialValue = JSON.stringify(initialValues.find((id) => item.id === id));
 
         return currentValues === initialValue;
     };
 
     /** Handle editable cell. */
     const handleCellValue = (name, value) => {
-        const [key, index] = name.split('.');
+        const [key, id] = name.split('.');
         const copiedEmployees = [...employees];
-        const editedEmployee = employees[index];
+        const editedEmployee = copiedEmployees.find((employee) => parseInt(employee.id) === parseInt(id));
         editedEmployee[key] = value;
         editedEmployee.touched = true;
 
@@ -67,12 +67,12 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
             deleted: []
         };
 
-        touched.forEach((item, index) => {
+        touched.forEach((item) => {
             const { deleted, touched, ...rest } = item;
 
             if (deleted) {
                 payload.deleted.push(rest);
-            } else if (!deleted && !isEqualInitialValue(rest, index)) {
+            } else if (!deleted && !isEqualInitialValue(rest)) {
                 payload.updated.push(rest);
             }
         });
