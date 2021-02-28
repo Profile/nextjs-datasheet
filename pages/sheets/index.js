@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { SheetHeader } from 'components/Sheets/Header';
 import { SheetContent } from 'components/Sheets/Content';
 
+import deepClone  from 'utils/deepClone';
+
 import styles from 'styles/Sheets.module.css';
 
 const employee = () => ({
@@ -30,9 +32,6 @@ const headerCells = [
     { key: 'phone', name: 'Phone', type: 'text', editable: true, filterable: true },
     { key: 'deleted', name: 'Mark as deleted', type: 'checkbox', editable: false, filterable: false },
 ];
-
-// TODO: Add to utils
-const deepClone = (data) => JSON.parse(JSON.stringify(data));
 
 export default function Sheets() {
     const [editableCell, setEditableCell] = useState(null);
@@ -63,7 +62,7 @@ export default function Sheets() {
 
     /** Revert all changes to initial. */
     const handleRevertValues = () => {
-        setEmployees(deepClone(initialValues));
+        window.confirm('Are you sure ?') && setEmployees(deepClone(initialValues));
     };
 
     /** Handle sheets submit action. */
