@@ -6,6 +6,7 @@ import { SheetFilter } from 'components/Sheets/Filter';
 import { SheetContent } from 'components/Sheets/Content';
 import { SheetPagination } from 'components/Sheets/Pagination';
 import { validationSchema } from 'components/Sheets/validationSchema';
+import { postData } from 'components/Sheets/services';
 
 import deepClone from 'utils/deepClone';
 import validate from 'utils/validate';
@@ -102,7 +103,7 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
     };
 
     /** Handle sheets submit action. */
-    const handleSubmitForm = () => {
+    const handleSubmitForm = async () => {
         const touched = employees.filter(isChanged);
         const hasError = touched.find(hasErrors);
 
@@ -117,16 +118,21 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
 
         touched.forEach((item) => {
             const { deleted, touched, error, ...rest } = item;
-            deleted ? payload.deleted.push(rest) : payload.updated.push(rest);
+            deleted ? payload.deleted.push(rest.id) : payload.updated.push(rest);
         });
 
         if (!payload.updated.length && !payload.deleted.length) {
             return alert('Nothing changed');
         }
 
-        console.log(payload);
+        try {
+            await postData('/api/employees', payload);
+            alert('Successfully updated');
+        }catch (e) {
+            alert('Something went wrong..');
+        }
 
-        alert('Successfully updated');
+
     };
 
     return (
@@ -169,8 +175,8 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
     );
 }
 
-const generateUrlPath = (query) => {
-    return `${process.env.API_BASE_URL}/api/employees?currentPage=${query.currentPage}`;
+const generateUrlPath = ({currentPage} = {}) => {
+    return `${process.env.API_BASE_URL}/api/employees?currentPage=${Math.max(currentPage || 1, 1)} : ''}`;
 };
 
 export async function getServerSideProps({ query }) {

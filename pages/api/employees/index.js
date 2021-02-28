@@ -21,6 +21,10 @@ export default (req, res) => {
     const { query }  = req;
     const { currentPage = 1 }  = query;
 
+    if (req.method === 'POST') {
+        return res.status(200).json({ data: { message: 'OK' } });
+    }
+
     res.status(200).json({
         data: generateMockedArray(15, employee),
         meta: {
