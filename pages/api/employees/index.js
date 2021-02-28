@@ -4,7 +4,7 @@ import faker from 'faker';
 
 faker.locale = 'az';
 
-const azPhoneFormat = '+994 (##) ###-##-##';
+const azPhoneFormat = '+994#########';
 
 const generateMockedArray = (length = 0, fn = null, ...params) => Array.from({ length }, () => fn(...params));
 

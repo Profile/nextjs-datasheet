@@ -5,8 +5,10 @@ import { SheetHeader } from 'components/Sheets/Header';
 import { SheetFilter } from 'components/Sheets/Filter';
 import { SheetContent } from 'components/Sheets/Content';
 import { SheetPagination } from 'components/Sheets/Pagination';
+import { validationSchema } from 'components/Sheets/validationSchema';
 
 import deepClone from 'utils/deepClone';
+import validate from 'utils/validate';
 
 import styles from 'styles/Sheets.module.css';
 
@@ -59,8 +61,9 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
             (employee) => parseInt(employee.id) === parseInt(id)
         );
         editedEmployee[key] = value;
-        const { touched, deleted, ...rest } = editedEmployee;
+        const { touched, deleted, error, ...rest } = editedEmployee;
         editedEmployee.touched = !isEqualInitialValue(rest);
+        editedEmployee.error = validate(key, rest, validationSchema);
 
         setEmployees(copiedEmployees);
     };
@@ -69,7 +72,6 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
     const handleRevertValues = () => {
         window.confirm('Are you sure ?') && setEmployees(deepClone(initialValues));
     };
-
 
     /** Handle Click outside of editable input. */
     const handleCloseEditableCell = ({ target: { type } }) => {
@@ -103,7 +105,7 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
         };
 
         touched.forEach((item) => {
-            const { deleted, touched, ...rest } = item;
+            const { deleted, touched, error, ...rest } = item;
             deleted ? payload.deleted.push(rest) : payload.updated.push(rest);
         });
 
