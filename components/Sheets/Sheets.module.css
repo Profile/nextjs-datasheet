@@ -37,6 +37,10 @@
     border-right: 1px solid #eee;
     border-bottom: 1px solid #ddd;
 }
+.tableContentCell.hasError {
+    background-color: #ff0000;
+    color: white;
+}
 
 .tableContentCellValue {
     padding: 8px;
