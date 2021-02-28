@@ -51,7 +51,7 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
                     key={row.id}>
                     {cells.map((cell) => (
                         <div className={styles.tableContentCell} key={cell.key}>
-                            {canEdit({ cell, row }) ? (
+                            {!isDeleted(row) && canEdit({ cell, row }) ? (
                                 renderEditableCell({ row, cell })
                             ) : (
                                 <div
