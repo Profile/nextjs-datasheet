@@ -31,9 +31,12 @@ const headerCells = [
     { key: 'deleted', name: 'Mark as deleted', type: 'checkbox', editable: false, filterable: false },
 ];
 
+// TODO: Add to utils
+const deepClone = (data) => JSON.parse(JSON.stringify(data));
+
 export default function Sheets() {
     const [editableCell, setEditableCell] = useState(null);
-    const [initialValues] = useState(mockEmployees);// TODO: experimental
+    const [initialValues] = useState(deepClone(mockEmployees));// TODO: experimental
     const [employees, setEmployees] = useState(mockEmployees);
 
     /** Return touched value. */
@@ -58,6 +61,11 @@ export default function Sheets() {
         setEmployees(copiedEmployees);
     };
 
+    /** Revert all changes to initial. */
+    const handleRevertValues = () => {
+        setEmployees(deepClone(initialValues));
+    };
+
     /** Handle sheets submit action. */
     const handleSubmitForm = () => {
         const touched = employees.filter(isTouched);
@@ -77,7 +85,7 @@ export default function Sheets() {
             }
         });
 
-        console.log(payload);
+        console.log(payload)
     };
 
     return (
@@ -107,6 +115,9 @@ export default function Sheets() {
                 <div className={styles.formActions}>
                     <button className={styles.submitAction} onClick={handleSubmitForm}>
                         Save changes
+                    </button>
+                    <button className={styles.submitAction} onClick={handleRevertValues}>
+                        Revert all changes
                     </button>
                 </div>
 
