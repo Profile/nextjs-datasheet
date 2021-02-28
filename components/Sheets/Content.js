@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { EditableInput } from './EditableInput';
 import styles from './Sheets.module.css';
 
