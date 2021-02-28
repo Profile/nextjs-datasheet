@@ -1,10 +1,11 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { SheetHeader } from 'components/Sheets/Header';
+import { SheetFilter } from 'components/Sheets/Filter';
 import { SheetContent } from 'components/Sheets/Content';
 
-import deepClone  from 'utils/deepClone';
+import deepClone from 'utils/deepClone';
 
 import styles from 'styles/Sheets.module.css';
 
@@ -12,31 +13,33 @@ const employee = () => ({
     id: 1,
     name: 'Example name',
     surname: 'Example surname',
-    dateOfBirth: '1614446820809',
+    dateOfBirth: '2021-02-28',
     position: 'CASHIER',
     phone: '+994000000000'
 });
-const mockEmployees = [
-    employee(),
-    employee(),
-    employee(),
-    employee(),
-];
+const mockEmployees = [employee(), employee(), employee(), employee()];
 
 const headerCells = [
     { key: 'id', name: 'ID', type: 'text', editable: false, filterable: true },
     { key: 'name', name: 'Name', type: 'text', editable: true, filterable: true },
     { key: 'surname', name: 'Surname', type: 'text', editable: true, filterable: true },
-    { key: 'dateOfBirth', name: 'Date of birth', type: 'text', editable: true, filterable: true },
+    { key: 'dateOfBirth', name: 'Date of birth', type: 'date', editable: true, filterable: true },
     { key: 'position', name: 'Position', type: 'text', editable: true, filterable: true },
     { key: 'phone', name: 'Phone', type: 'text', editable: true, filterable: true },
-    { key: 'deleted', name: 'Mark as deleted', type: 'checkbox', editable: false, filterable: false },
+    {
+        key: 'deleted',
+        name: 'Mark as deleted',
+        type: 'checkbox',
+        editable: false,
+        filterable: false
+    }
 ];
 
 export default function Sheets() {
     const [editableCell, setEditableCell] = useState(null);
-    const [initialValues] = useState(deepClone(mockEmployees));// TODO: experimental
+    const [initialValues] = useState(deepClone(mockEmployees)); // TODO: experimental
     const [employees, setEmployees] = useState(mockEmployees);
+    const [filterValues, setFilterValues] = useState({});
 
     /** Return touched value. */
     const isTouched = (value) => value.touched;
@@ -70,27 +73,42 @@ export default function Sheets() {
         const touched = employees.filter(isTouched);
         const payload = {
             updated: [],
-            deleted: [],
+            deleted: []
         };
 
         touched.forEach((item, index) => {
-            const {deleted, touched, ...rest} = item;
+            const { deleted, touched, ...rest } = item;
 
-            if(deleted) {
+            if (deleted) {
                 payload.deleted.push(rest);
-            }
-            else if(!deleted && !isEqualInitialValue(rest, index)) {
+            } else if (!deleted && !isEqualInitialValue(rest, index)) {
                 payload.updated.push(rest);
             }
         });
-
-        console.log(payload)
     };
 
+    /** Handle Click outside of editable input. */
     const handleCloseEditableCell = ({ target: { localName } }) => {
-        if(localName === 'input') return;
+        if (localName === 'input') return;
         setEditableCell(null);
-    }
+    };
+
+    /** Handle filter values. */
+    let handleFilterValues = (changedValue) => {
+        setFilterValues({ ...filterValues, ...changedValue });
+    };
+
+    /** Filter items by filterValues. */
+    let handleFilteredItems = (items) => {
+        return items.filter((item) => {
+            return Object.keys(filterValues).every((key) => {
+                const itemValue = item[key].toString().toLowerCase().replace(/\s/g, '');
+                const filterValue = filterValues[key].toString().toLowerCase().replace(/\s/g, '');
+
+                return !!itemValue.includes(filterValue);
+            });
+        });
+    };
 
     return (
         <div>
@@ -99,19 +117,21 @@ export default function Sheets() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <main className={styles.mainContent} onClick={e => handleCloseEditableCell(e) }>
+            <main className={styles.mainContent} onClick={(e) => handleCloseEditableCell(e)}>
                 <section className={styles.sheet}>
-                    {<SheetHeader cells={headerCells} />}
-                    <div> {/* TODO: Search functionality*/} </div>
-                    {
-                        <SheetContent
-                            handleCellValue={handleCellValue}
-                            editableCell={editableCell}
-                            setEditableCell={setEditableCell}
-                            rows={employees}
-                            cells={headerCells}
-                        />
-                    }
+                    <SheetHeader cells={headerCells} />
+                    <SheetFilter
+                        filterValues={filterValues}
+                        onChange={handleFilterValues}
+                        cells={headerCells}
+                    />
+                    <SheetContent
+                        handleCellValue={handleCellValue}
+                        editableCell={editableCell}
+                        setEditableCell={setEditableCell}
+                        rows={handleFilteredItems(employees)}
+                        cells={headerCells}
+                    />
                 </section>
                 {/* TODO: Some basic validations (date, phone number validation etc.)*/}
                 {/* TODO: Pagination*/}
@@ -124,7 +144,6 @@ export default function Sheets() {
                         Revert all changes
                     </button>
                 </div>
-
             </main>
         </div>
     );
