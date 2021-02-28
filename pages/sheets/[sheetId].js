@@ -6,18 +6,9 @@ import { SheetFilter } from 'components/Sheets/Filter';
 import { SheetContent } from 'components/Sheets/Content';
 
 import deepClone from 'utils/deepClone';
+import useFetch from 'utils/hooks/useFetch';
 
 import styles from 'styles/Sheets.module.css';
-
-const employee = () => ({
-    id: 1,
-    name: 'Example name',
-    surname: 'Example surname',
-    dateOfBirth: '2021-02-28',
-    position: 'CASHIER',
-    phone: '+994000000000'
-});
-const mockEmployees = [employee(), employee(), employee(), employee()];
 
 const headerCells = [
     { key: 'id', name: 'ID', type: 'text', editable: false, filterable: true },
@@ -35,10 +26,11 @@ const headerCells = [
     }
 ];
 
-export default function Sheets() {
+export default function Sheets({employees: { data: employeesData }}) {
+
     const [editableCell, setEditableCell] = useState(null);
-    const [initialValues] = useState(deepClone(mockEmployees)); // TODO: experimental
-    const [employees, setEmployees] = useState(mockEmployees);
+    const [initialValues] = useState(deepClone(employeesData));
+    const [employees, setEmployees] = useState(employeesData);
     const [filterValues, setFilterValues] = useState({});
 
     /** Return touched value. */
@@ -147,4 +139,17 @@ export default function Sheets() {
             </main>
         </div>
     );
+}
+
+export async function getServerSideProps({query}) {
+
+    const res = await fetch(`${process.env.API_BASE_URL}/api/employees?perPage=${query.perPage || 20}`, {});
+    const json = await res.json();
+    return {
+        props: {
+            employees: {
+                ...json
+            },
+        },
+    }
 }
