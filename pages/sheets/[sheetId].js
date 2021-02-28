@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { SheetHeader } from 'components/Sheets/Header';
 import { SheetFilter } from 'components/Sheets/Filter';
