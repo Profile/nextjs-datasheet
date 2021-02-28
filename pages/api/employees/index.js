@@ -12,8 +12,8 @@ const employee = () => ({
     id: faker.random.number(),
     name: faker.name.firstName(),
     surname: faker.name.lastName(),
-    dateOfBirth: faker.date.past(20).toISOString(),
-    position: faker.helpers.randomize(['developer', 'underwriter', 'cashier' , 'something']),
+    dateOfBirth: faker.date.past(20).toLocaleDateString(),
+    position: faker.random.word(),
     phone: faker.phone.phoneNumber(azPhoneFormat),
 });
 
