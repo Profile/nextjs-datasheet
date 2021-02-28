@@ -37,11 +37,14 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
         return cell.editable && editableCell === generateUniqueKey(cell.key, row.id);
     };
 
-    /** Checking deleted row. */
-    const isDeleted = (row) => !!row.deleted;
+    /** Item is deleted. */
+    const isDeleted = (item) => item && !!item.deleted;
 
-    /** Checking touched row. */
-    const isTouched = (row) => !!row.touched;
+    /** Item is touched. */
+    const isTouched = (item) => item && !!item.touched;
+
+    /** Item has error. */
+    const hasError = ({row, cell}) => !!row?.error?.[cell.key];
 
     return (
         <div className={styles.tableContent}>
@@ -54,7 +57,13 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
                     `}
                     key={row.id}>
                     {cells.map((cell) => (
-                        <div className={styles.tableContentCell} key={cell.key}>
+                        <div
+                            className={`
+                                ${styles.tableContentCell}
+                                ${hasError({row, cell}) ? styles.hasError : ''}
+                            `}
+                            key={cell.key}
+                        >
                             {!isDeleted(row) && canEdit({ cell, row }) ? (
                                 renderEditableCell({ row, cell })
                             ) : (

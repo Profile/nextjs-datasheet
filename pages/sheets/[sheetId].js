@@ -63,7 +63,7 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
         editedEmployee[key] = value;
         const { touched, deleted, error, ...rest } = editedEmployee;
         editedEmployee.touched = !isEqualInitialValue(rest);
-        editedEmployee.error = validate(key, rest, validationSchema);
+        editedEmployee.error = { ...error, ...validate(key, rest, validationSchema) };
 
         setEmployees(copiedEmployees);
     };
@@ -80,12 +80,12 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
     };
 
     /** Handle filter values. */
-    let handleFilterValues = (changedValue) => {
+    const handleFilterValues = (changedValue) => {
         setFilterValues({ ...filterValues, ...changedValue });
     };
 
     /** Filter items by filterValues. */
-    let handleFilteredItems = (items) => {
+    const handleFilteredItems = (items) => {
         return items.filter((item) => {
             return Object.keys(filterValues).every((key) => {
                 const itemValue = item[key].toString().toLowerCase().replace(/\s/g, '');
@@ -96,9 +96,19 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
         });
     };
 
+    const hasErrors = (value) => {
+       return !value.deleted && Object.values(value.error).find(i => !!i)
+    }
+
     /** Handle sheets submit action. */
     const handleSubmitForm = () => {
         const touched = employees.filter(isChanged);
+        const hasError = touched.find(hasErrors);
+
+        if(hasError) {
+            return alert('Please fix errors');
+        }
+
         const payload = {
             updated: [],
             deleted: []
