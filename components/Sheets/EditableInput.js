@@ -5,7 +5,6 @@ export function EditableInput({defaultValue, onChange, onFocus, onBlur}) {
         <input
             className={styles.tableContentCellInput}
             type="text"
-           // value={value}
             defaultValue={defaultValue}
             autoFocus={true}
             onBlur={onBlur}
