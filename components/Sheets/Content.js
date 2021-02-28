@@ -12,10 +12,7 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
         <EditableInput
             value={row[cell.key]}
             onChange={({ target }) =>
-                handleCellValue(
-                    generateUniqueKey(cell.key, rowIndex),
-                    target.value
-                )
+                handleCellValue(generateUniqueKey(cell.key, rowIndex), target.value)
             }
             onFocus={(event) => event.target.select()}
         />
@@ -24,18 +21,14 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
     /** Render checkbox cell. */
     const renderCheckboxCell = ({ row, rowIndex, cell }) => (
         <input
-        type="checkbox"
-        checked={row[cell.key] !== undefined ? row[cell.key]: false }
-        defaultChecked={row[cell.key]}
-        onChange={({ target }) =>
-            handleCellValue(
-                generateUniqueKey(cell.key, rowIndex),
-                !row[cell.key]
-            )
-        }
-    />
+            type="checkbox"
+            checked={row[cell.key] !== undefined ? row[cell.key] : false}
+            defaultChecked={row[cell.key]}
+            onChange={({ target }) =>
+                handleCellValue(generateUniqueKey(cell.key, rowIndex), !row[cell.key])
+            }
+        />
     );
-
 
     return (
         <div className={styles.tableContent}>
@@ -52,11 +45,9 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
                                     onDoubleClick={() =>
                                         setEditableCell(generateUniqueKey(cell.key, rowIndex))
                                     }>
-                                    {cell.type === 'checkbox' ? (
-                                        renderCheckboxCell({ row, rowIndex, cell })
-                                    ) : (
-                                        row[cell.key]
-                                    )}
+                                    {cell.type === 'checkbox'
+                                        ? renderCheckboxCell({ row, rowIndex, cell })
+                                        : row[cell.key]}
                                 </div>
                             )}
                         </div>
