@@ -152,8 +152,6 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
                         cells={headerCells}
                     />
                 </section>
-                {/* TODO: Some basic validations (date, phone number validation etc.)*/}
-
                 <SheetPagination {...meta} />
 
                 {isFormChanged && (
