@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 
 import { SheetHeader } from 'components/Sheets/Header';
@@ -28,7 +27,6 @@ const headerCells = [
 ];
 
 export default function Sheets({ employees: { data: employeesData, meta } }) {
-    const router = useRouter();
     const [editableCell, setEditableCell] = useState(null);
     const [initialValues] = useState(deepClone(employeesData));
     const [employees, setEmployees] = useState(employeesData);
@@ -78,6 +76,12 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
                 payload.updated.push(rest);
             }
         });
+
+        if (!payload.updated.length && !payload.deleted.length) {
+            return alert('Nothing changed');
+        }
+
+        alert('Successfully updated');
     };
 
     /** Handle Click outside of editable input. */
@@ -89,21 +93,6 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
     /** Handle filter values. */
     let handleFilterValues = (changedValue) => {
         setFilterValues({ ...filterValues, ...changedValue });
-    };
-
-    /** Handle pagination change. */
-    let handlePaginationChange = (currentPage) => {
-        console.log(currentPage);
-        router.push(
-            {
-                query: {
-                    ...router.query,
-                    currentPage
-                }
-            },
-            undefined,
-            { shallow: true }
-        );
     };
 
     /** Filter items by filterValues. */
@@ -143,7 +132,7 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
                 </section>
                 {/* TODO: Some basic validations (date, phone number validation etc.)*/}
 
-                <SheetPagination {...meta} onChange={handlePaginationChange} />
+                <SheetPagination {...meta} />
 
                 <div className={styles.formActions}>
                     <button className={styles.submitAction} onClick={handleSubmitForm}>
@@ -159,9 +148,7 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
 }
 
 const generateUrlPath = (query) => {
-    return `${process.env.API_BASE_URL}/api/employees?currentPage=${
-        query.currentPage
-    }`;
+    return `${process.env.API_BASE_URL}/api/employees?currentPage=${query.currentPage}`;
 };
 
 export async function getServerSideProps({ query }) {
