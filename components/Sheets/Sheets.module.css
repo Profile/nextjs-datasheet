@@ -25,6 +25,10 @@
     background-color: #eee;
 }
 
+.tableContentRows.deleted {
+    background-color: #efaba6;
+}
+
 .tableContentCell {
     border-right: 1px solid #eee;
     border-bottom: 1px solid #ddd;

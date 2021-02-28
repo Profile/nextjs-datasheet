@@ -12,10 +12,10 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
         <EditableInput
             defaultValue={row[cell.key]}
             onFocus={(event) => event.target.select()}
-            onBlur={({target}) => {
+            onBlur={({ target }) => {
                 // Avoid unnecessary computation
-                if(target.value === row[cell.key]) return;
-                handleCellValue(generateUniqueKey(cell.key, row.id), target.value)
+                if (target.value === row[cell.key]) return;
+                handleCellValue(generateUniqueKey(cell.key, row.id), target.value);
             }}
         />
     );
@@ -37,10 +37,18 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
         return cell.editable && editableCell === generateUniqueKey(cell.key, row.id);
     };
 
+    /** Checking deleted row. */
+    const isDeleted = (row) => !!row.deleted;
+
     return (
         <div className={styles.tableContent}>
-            {rows.map(row => (
-                <div className={styles.tableContentRows} key={row.id}>
+            {rows.map((row) => (
+                <div
+                    className={`
+                        ${styles.tableContentRows} 
+                        ${isDeleted(row) ? styles.deleted : ''}
+                    `}
+                    key={row.id}>
                     {cells.map((cell) => (
                         <div className={styles.tableContentCell} key={cell.key}>
                             {canEdit({ cell, row }) ? (
