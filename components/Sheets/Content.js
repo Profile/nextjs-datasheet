@@ -30,14 +30,18 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
         />
     );
 
+    /** Computed editable cell. */
+    const canEdit = ({ cell, rowIndex }) => {
+        return cell.editable && editableCell === generateUniqueKey(cell.key, rowIndex);
+    };
+
     return (
         <div className={styles.tableContent}>
             {rows.map((row, rowIndex) => (
                 <div className={styles.tableContentRows} key={rowIndex}>
                     {cells.map((cell) => (
                         <div className={styles.tableContentCell} key={cell.key}>
-                            {cell.editable &&
-                            editableCell === generateUniqueKey(cell.key, rowIndex) ? (
+                            {canEdit({ cell, rowIndex }) ? (
                                 renderEditableCell({ row, rowIndex, cell })
                             ) : (
                                 <div
