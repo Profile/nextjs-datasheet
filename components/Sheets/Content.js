@@ -40,12 +40,16 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
     /** Checking deleted row. */
     const isDeleted = (row) => !!row.deleted;
 
+    /** Checking touched row. */
+    const isTouched = (row) => !!row.touched;
+
     return (
         <div className={styles.tableContent}>
             {rows.map((row) => (
                 <div
                     className={`
-                        ${styles.tableContentRows} 
+                        ${styles.tableContentRows}                   
+                        ${isTouched(row) ? styles.touched : ''}
                         ${isDeleted(row) ? styles.deleted : ''}
                     `}
                     key={row.id}>

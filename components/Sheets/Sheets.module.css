@@ -25,6 +25,10 @@
     background-color: #eee;
 }
 
+.tableContentRows.touched {
+    background-color: #cee8cf;
+}
+
 .tableContentRows.deleted {
     background-color: #efaba6;
 }

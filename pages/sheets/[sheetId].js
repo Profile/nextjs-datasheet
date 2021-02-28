@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { SheetHeader } from 'components/Sheets/Header';
 import { SheetFilter } from 'components/Sheets/Filter';
@@ -28,28 +28,39 @@ const headerCells = [
 
 export default function Sheets({ employees: { data: employeesData, meta } }) {
     const [editableCell, setEditableCell] = useState(null);
+    const [isFormChanged, setIsFormChanged] = useState(false);
     const [initialValues] = useState(deepClone(employeesData));
     const [employees, setEmployees] = useState(employeesData);
     const [filterValues, setFilterValues] = useState({});
 
-    /** Return touched value. */
-    const isTouched = (value) => value.touched;
+    /** Watch form changes. */
+    useEffect(() => {
+        setIsFormChanged(!!employees.find(isChanged));
+    }, [employees]);
+
+    /** Return changed value. */
+    const isChanged = (value) => !!value.touched || !!value.deleted;
 
     /** Computed diff between initial and current value. */
     const isEqualInitialValue = (item) => {
-        const currentValues = JSON.stringify(item);
-        const initialValue = JSON.stringify(initialValues.find((id) => item.id === id));
+        const currentValue = JSON.stringify(item);
+        const initialValue = JSON.stringify(
+            initialValues.find((initial) => item.id === initial.id)
+        );
 
-        return currentValues === initialValue;
+        return currentValue === initialValue;
     };
 
     /** Handle editable cell. */
     const handleCellValue = (name, value) => {
         const [key, id] = name.split('.');
         const copiedEmployees = [...employees];
-        const editedEmployee = copiedEmployees.find((employee) => parseInt(employee.id) === parseInt(id));
+        const editedEmployee = copiedEmployees.find(
+            (employee) => parseInt(employee.id) === parseInt(id)
+        );
         editedEmployee[key] = value;
-        editedEmployee.touched = true;
+        const { touched, deleted, ...rest } = editedEmployee;
+        editedEmployee.touched = !isEqualInitialValue(rest);
 
         setEmployees(copiedEmployees);
     };
@@ -59,30 +70,6 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
         window.confirm('Are you sure ?') && setEmployees(deepClone(initialValues));
     };
 
-    /** Handle sheets submit action. */
-    const handleSubmitForm = () => {
-        const touched = employees.filter(isTouched);
-        const payload = {
-            updated: [],
-            deleted: []
-        };
-
-        touched.forEach((item) => {
-            const { deleted, touched, ...rest } = item;
-
-            if (deleted) {
-                payload.deleted.push(rest);
-            } else if (!deleted && !isEqualInitialValue(rest)) {
-                payload.updated.push(rest);
-            }
-        });
-
-        if (!payload.updated.length && !payload.deleted.length) {
-            return alert('Nothing changed');
-        }
-
-        alert('Successfully updated');
-    };
 
     /** Handle Click outside of editable input. */
     const handleCloseEditableCell = ({ target: { type } }) => {
@@ -105,6 +92,28 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
                 return !!itemValue.includes(filterValue);
             });
         });
+    };
+
+    /** Handle sheets submit action. */
+    const handleSubmitForm = () => {
+        const touched = employees.filter(isChanged);
+        const payload = {
+            updated: [],
+            deleted: []
+        };
+
+        touched.forEach((item) => {
+            const { deleted, touched, ...rest } = item;
+            deleted ? payload.deleted.push(rest) : payload.updated.push(rest);
+        });
+
+        if (!payload.updated.length && !payload.deleted.length) {
+            return alert('Nothing changed');
+        }
+
+        console.log(payload);
+
+        alert('Successfully updated');
     };
 
     return (
@@ -134,14 +143,16 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
 
                 <SheetPagination {...meta} />
 
-                <div className={styles.formActions}>
-                    <button className={styles.submitAction} onClick={handleSubmitForm}>
-                        Save changes
-                    </button>
-                    <button className={styles.submitAction} onClick={handleRevertValues}>
-                        Revert all changes
-                    </button>
-                </div>
+                {isFormChanged && (
+                    <div className={styles.formActions}>
+                        <button className={styles.submitAction} onClick={handleSubmitForm}>
+                            Save changes
+                        </button>
+                        <button className={styles.submitAction} onClick={handleRevertValues}>
+                            Revert all changes
+                        </button>
+                    </div>
+                )}
             </main>
         </div>
     );
