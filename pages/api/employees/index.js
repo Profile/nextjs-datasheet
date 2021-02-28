@@ -19,13 +19,15 @@ const employee = () => ({
 
 export default (req, res) => {
     const { query }  = req;
-    const { perPage = 20 }  = query;
+    const { currentPage = 1 }  = query;
 
     res.status(200).json({
-        data: generateMockedArray(Math.min(perPage, 30), employee),
+        data: generateMockedArray(15, employee),
         meta: {
-            perPage: Math.min(perPage, 30),
-            total: 400
+            perPage: 15,
+            currentPage,
+            total: 200,
+            maxPage: 200 / 15
         }
     })
 }

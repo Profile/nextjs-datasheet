@@ -1,12 +1,13 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 
 import { SheetHeader } from 'components/Sheets/Header';
 import { SheetFilter } from 'components/Sheets/Filter';
 import { SheetContent } from 'components/Sheets/Content';
+import { SheetPagination } from 'components/Sheets/Pagination';
 
 import deepClone from 'utils/deepClone';
-import useFetch from 'utils/hooks/useFetch';
 
 import styles from 'styles/Sheets.module.css';
 
@@ -26,8 +27,8 @@ const headerCells = [
     }
 ];
 
-export default function Sheets({employees: { data: employeesData }}) {
-
+export default function Sheets({ employees: { data: employeesData, meta } }) {
+    const router = useRouter();
     const [editableCell, setEditableCell] = useState(null);
     const [initialValues] = useState(deepClone(employeesData));
     const [employees, setEmployees] = useState(employeesData);
@@ -90,6 +91,21 @@ export default function Sheets({employees: { data: employeesData }}) {
         setFilterValues({ ...filterValues, ...changedValue });
     };
 
+    /** Handle pagination change. */
+    let handlePaginationChange = (currentPage) => {
+        console.log(currentPage);
+        router.push(
+            {
+                query: {
+                    ...router.query,
+                    currentPage
+                }
+            },
+            undefined,
+            { shallow: true }
+        );
+    };
+
     /** Filter items by filterValues. */
     let handleFilteredItems = (items) => {
         return items.filter((item) => {
@@ -126,7 +142,8 @@ export default function Sheets({employees: { data: employeesData }}) {
                     />
                 </section>
                 {/* TODO: Some basic validations (date, phone number validation etc.)*/}
-                {/* TODO: Pagination*/}
+
+                <SheetPagination {...meta} onChange={handlePaginationChange} />
 
                 <div className={styles.formActions}>
                     <button className={styles.submitAction} onClick={handleSubmitForm}>
@@ -141,15 +158,20 @@ export default function Sheets({employees: { data: employeesData }}) {
     );
 }
 
-export async function getServerSideProps({query}) {
+const generateUrlPath = (query) => {
+    return `${process.env.API_BASE_URL}/api/employees?currentPage=${
+        query.currentPage
+    }`;
+};
 
-    const res = await fetch(`${process.env.API_BASE_URL}/api/employees?perPage=${query.perPage || 20}`, {});
+export async function getServerSideProps({ query }) {
+    const res = await fetch(generateUrlPath(query));
     const json = await res.json();
     return {
         props: {
             employees: {
                 ...json
-            },
-        },
-    }
+            }
+        }
+    };
 }
