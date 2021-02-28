@@ -62,3 +62,21 @@
 .tableFilterCellInput {
 
 }
+
+.tablePagination {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.tablePaginationBtn {
+    padding: 10px 15px;
+    background-color: #03a9f4;
+    border: 1px solid;
+    color: white;
+}
+
+.tablePaginationInput {
+    padding: 10px 15px;
+    max-width: 100px;
+}
