@@ -25,7 +25,8 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
     const renderCheckboxCell = ({ row, rowIndex, cell }) => (
         <input
         type="checkbox"
-        value={row[cell.key]}
+        checked={row[cell.key] !== undefined ? row[cell.key]: false }
+        defaultChecked={row[cell.key]}
         onChange={({ target }) =>
             handleCellValue(
                 generateUniqueKey(cell.key, rowIndex),
