@@ -1,3 +1,7 @@
+.mainContent {
+    min-height: 100vh;
+}
+
 .sheet {
     margin-bottom: 20px;
 }

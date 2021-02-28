@@ -87,6 +87,11 @@ export default function Sheets() {
         console.log(payload)
     };
 
+    const handleCloseEditableCell = ({ target: { localName } }) => {
+        if(localName === 'input') return;
+        setEditableCell(null);
+    }
+
     return (
         <div>
             <Head>
@@ -94,7 +99,7 @@ export default function Sheets() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <main>
+            <main className={styles.mainContent} onClick={e => handleCloseEditableCell(e) }>
                 <section className={styles.sheet}>
                     {<SheetHeader cells={headerCells} />}
                     <div> {/* TODO: Search functionality*/} </div>
