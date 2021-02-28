@@ -1,11 +1,12 @@
 import styles from "./Sheets.module.css";
 
-export function EditableInput({value, onChange, onFocus, onBlur}) {
+export function EditableInput({defaultValue, onChange, onFocus, onBlur}) {
     return (
         <input
             className={styles.tableContentCellInput}
             type="text"
-            value={value}
+           // value={value}
+            defaultValue={defaultValue}
             autoFocus={true}
             onBlur={onBlur}
             onFocus={onFocus}

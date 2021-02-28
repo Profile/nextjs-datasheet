@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { EditableInput } from './EditableInput';
 import styles from './Sheets.module.css';
 
@@ -10,11 +12,13 @@ export function SheetContent({ rows, cells, editableCell, setEditableCell, handl
     /** Render editable cell. */
     const renderEditableCell = ({ row, cell }) => (
         <EditableInput
-            value={row[cell.key]}
-            onChange={({ target }) =>
-                handleCellValue(generateUniqueKey(cell.key, row.id), target.value)
-            }
+            defaultValue={row[cell.key]}
             onFocus={(event) => event.target.select()}
+            onBlur={({target}) => {
+                // Avoid unnecessary computation
+                if(target.value === row[cell.key]) return;
+                handleCellValue(generateUniqueKey(cell.key, row.id), target.value)
+            }}
         />
     );
 
