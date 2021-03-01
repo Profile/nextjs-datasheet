@@ -1,17 +1,19 @@
-import styles from "./Sheets.module.css";
+import { memo } from 'react';
+import styles from './Sheets.module.css';
 
-export function SheetHeader({cells}) {
-    return (
-        <div className={styles.tableHeader}>
-            <div className={styles.tableHeaderRows}>
-                {
-                    cells.map(cell => (
+export const SheetHeader  = memo(
+    ({ cells }) => {
+        return (
+            <div className={styles.tableHeader}>
+                <div className={styles.tableHeaderRows}>
+                    {cells.map((cell) => (
                         <div className={styles.tableHeaderCell} key={cell.name}>
                             {cell.name}
                         </div>
-                    ))
-                }
+                    ))}
+                </div>
             </div>
-        </div>
-    )
-}
+        );
+    },
+    () => true
+);

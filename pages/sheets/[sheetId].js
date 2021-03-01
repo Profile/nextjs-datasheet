@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 
+import { SheetContainer } from 'components/Sheets/Container';
 import { SheetHeader } from 'components/Sheets/Header';
 import { SheetFilter } from 'components/Sheets/Filter';
 import { SheetContent } from 'components/Sheets/Content';
@@ -148,31 +149,33 @@ export default function Sheets({ employees: { data: employeesData, meta } }) {
                     <div className={styles.contentHeader}></div>
                     <section className={styles.sheet}>
                         <h1 className={styles.contentTitle}>Employees</h1>
-                        <SheetHeader cells={headerCells} />
-                        <SheetFilter
-                            filterValues={filterValues}
-                            onChange={handleFilterValues}
-                            cells={headerCells}
-                        />
-                        <SheetContent
-                            handleCellValue={handleCellValue}
-                            editableCell={editableCell}
-                            setEditableCell={setEditableCell}
-                            rows={handleFilteredItems(employees)}
-                            cells={headerCells}
-                        />
-                        <SheetPagination {...meta} />
+                        <SheetContainer>
+                            <SheetHeader cells={headerCells} />
+                            <SheetFilter
+                                filterValues={filterValues}
+                                onChange={handleFilterValues}
+                                cells={headerCells}
+                            />
+                            <SheetContent
+                                handleCellValue={handleCellValue}
+                                editableCell={editableCell}
+                                setEditableCell={setEditableCell}
+                                rows={handleFilteredItems(employees)}
+                                cells={headerCells}
+                            />
+                            <SheetPagination {...meta} />
 
-                        {isFormChanged && (
-                            <div className={styles.formActions}>
-                                <button className={styles.submitAction} onClick={handleSubmitForm}>
-                                    Save changes
-                                </button>
-                                <button className={styles.submitAction} onClick={handleRevertValues}>
-                                    Revert all changes
-                                </button>
-                            </div>
-                        )}
+                            {isFormChanged && (
+                                <div className={styles.formActions}>
+                                    <button className={styles.submitAction} onClick={handleSubmitForm}>
+                                        Save changes
+                                    </button>
+                                    <button className={styles.submitAction} onClick={handleRevertValues}>
+                                        Revert all changes
+                                    </button>
+                                </div>
+                            )}
+                        </SheetContainer>
                     </section>
                 </div>
             </main>
